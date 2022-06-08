@@ -50,12 +50,14 @@ export default {
       console.log(this.input)
       this.convert = true
       axios({
-        method: 'get',
-        url: '../../static/data.json',
+        method: 'post',
+        url: '/qrcode',
         params: {
-          text: this.input
+          url: this.input
         }
       }).then((res) => {
+        const name = res.data.data
+        this.src = '/api/download/' + name
         console.log('数据：', res)
       })
     }

@@ -27,19 +27,19 @@
           </el-table-column>
           <el-table-column
             prop="name"
-            label="姓名"
-            width="180">
+            label="文件名称"
+            width="580">
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="地址">
+            prop="size"
+            label="大小">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
             width="140">
             <template v-slot="scope">
-              <el-button @click="handleClick(scope.row)" type="primary" size="small">下载</el-button>
+              <el-button @click="handleDownLoad(scope.row)" type="primary" size="small">下载</el-button>
             </template>
           </el-table-column>
           <el-table-column
@@ -57,8 +57,8 @@
     <!--    删除对话框部分-->
     <el-dialog title="输入密码" :visible.sync="dialogFormVisible">
       <el-form :model="form">
-        <el-form-item label="输入密码" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-form-item label="输入密码" label-width="auto">
+          <el-input v-model="form.name" autocomplete="off" size="small" show-passwor></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -71,8 +71,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'demo',
   data () {
@@ -89,23 +87,7 @@ export default {
         name: 'food2.jpeg',
         url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
       }],
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      tableData: []
     }
   },
   methods: {
@@ -119,20 +101,46 @@ export default {
       console.log(row)
       this.dialogFormVisible = true
     },
-    getData () {
-      axios({
+
+    handleDownLoad (row) {
+      this.$axios({
         method: 'get',
-        url: this.$globle.baseUrl + 'list',
+        url: '/filedown/' + row.name,
+        params: {},
+        responseType: 'blob'
+      }).then((res) => {
+        const { data, headers } = res
+        const fileName = headers['content-disposition'].replace(/\w+;filename=(.*)/, '$1')
+        // 此处当返回json文件时需要先对data进行JSON.stringify处理，其他类型文件不用做处理
+        // const blob = new Blob([JSON.stringify(data)], ...)
+        const blob = new Blob([data], {type: headers['content-type']})
+        let dom = document.createElement('a')
+        let url = window.URL.createObjectURL(blob)
+        dom.href = url
+        dom.download = decodeURI(fileName)
+        dom.style.display = 'none'
+        document.body.appendChild(dom)
+        dom.click()
+        dom.parentNode.removeChild(dom)
+        window.URL.revokeObjectURL(url)
+        console.log('下载成功：')
+      })
+    },
+    getData () {
+      this.$axios({
+        method: 'get',
+        url: '/file',
         params: {
           text: this.input
         }
       }).then((res) => {
-        console.log('数据：', res)
+        this.tableData = res.data.data
+        console.log('数据：', res.data.data)
       })
     }
   },
   created () {
-    this.created()
+    this.getData()
   }
 }
 </script>

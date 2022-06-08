@@ -8,10 +8,17 @@ import 'element-ui/lib/theme-chalk/index.css'
 // 引入echarts
 import * as echarts from 'echarts'
 import global from './globle.js'
+
+import Axios from 'axios'
+Axios.defaults.baseURL = '/api/'
 Vue.prototype.$echarts = echarts
 Vue.prototype.$globle = global
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+
+Axios.defaults.withCredentials = true
+Vue.prototype.$axios = Axios
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

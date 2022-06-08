@@ -31,7 +31,7 @@ export default {
       navList: [
         {name: '/', navItem: '首页', icon: 'el-icon-s-home'},
         {name: '/about', navItem: '发现项目', icon: 'el-icon-s-custom'},
-        {name: '/demo', navItem: '社区动态', icon: 'el-icon-s-goods'},
+        {name: '/demo', navItem: '文件列表', icon: 'el-icon-s-goods'},
         {name: '/bar', navItem: '柱状图', icon: 'el-icon-s-grid'},
         {name: '/map', navItem: '位置展示', icon: 'el-icon-s-marketing'}
       ]
