@@ -109,8 +109,9 @@ export default {
         params: {},
         responseType: 'blob'
       }).then((res) => {
-        const { data, headers } = res
-        const fileName = headers['content-disposition'].replace(/\w+;filename=(.*)/, '$1')
+        const {data, headers} = res
+        const fileName = headers['content-disposition'].replace('attachment; filename=', '')
+        console.log(fileName)
         // 此处当返回json文件时需要先对data进行JSON.stringify处理，其他类型文件不用做处理
         // const blob = new Blob([JSON.stringify(data)], ...)
         const blob = new Blob([data], {type: headers['content-type']})
