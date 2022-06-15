@@ -130,7 +130,7 @@ export default {
     getData () {
       this.$axios({
         method: 'get',
-        url: '/file',
+        url: '/file/',
         params: {
           text: this.input
         }
