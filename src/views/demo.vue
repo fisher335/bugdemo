@@ -4,7 +4,8 @@
       <el-col :span=6 :offset=9>
         <el-upload v-show="list"
                    class="upload-demo"
-                   action="https://jsonplaceholder.typicode.com/posts/"
+                   action="/api/upload"
+                   :on-success="handleSuccess"
                    :on-change="handleChange"
                    :file-list="fileList">
           <el-button size="small" type="primary">点击上传</el-button>
@@ -80,19 +81,18 @@ export default {
         name: ''
       },
       dialogFormVisible: false,
-      fileList: [{
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-      }, {
-        name: 'food2.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-      }],
+      fileList: [],
       tableData: []
     }
   },
   methods: {
     handleChange (file, fileList) {
       this.fileList = fileList.slice(-3)
+    },
+    handleSuccess (response, file, filelist) {
+      this.list = !this.list
+      this.$router.push('/demo').catch(() => {
+      })
     },
     handleClick () {
       this.list = !this.list
@@ -130,12 +130,12 @@ export default {
     getData () {
       this.$axios({
         method: 'get',
-        url: '/file/',
+        url: 'file',
         params: {
           text: this.input
         }
       }).then((res) => {
-        this.tableData = res.data.data
+        this.tableData = res.data
         console.log('数据：', this.tableData)
       })
     }

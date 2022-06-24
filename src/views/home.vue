@@ -47,17 +47,16 @@ export default {
   },
   methods: {
     submit () {
-      console.log(this.input)
       this.convert = true
       axios({
-        method: 'post',
+        method: 'get',
         url: '/qrcode',
         params: {
           url: this.input
         }
       }).then((res) => {
         const name = res.data.data
-        this.src = '/api/download/' + name
+        this.src = 'api/static/' + name
         console.log('数据：', res)
       })
     }
