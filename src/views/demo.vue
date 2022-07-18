@@ -1,46 +1,46 @@
 <template>
   <div>
     <el-row align="middle">
-      <el-col :span=6 :offset=9>
+      <el-col :offset=9 :span=6>
         <el-upload v-show="list"
-                   class="upload-demo"
-                   action="/api/upload"
-                   :on-success="handleSuccess"
+                   :file-list="fileList"
                    :on-change="handleChange"
-                   :file-list="fileList">
+                   :on-success="handleSuccess"
+                   action="/api/upload"
+                   class="upload-demo">
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          <el-button @click.stop="handleClick" size="small" type="primary">取消</el-button>
+          <el-button size="small" type="primary" @click.stop="handleClick">取消</el-button>
         </el-upload>
       </el-col>
     </el-row>
     <el-row>
-      <el-col style="width: 100%" :offset="0.5">
+      <el-col :offset="0.5" style="width: 100%">
         <el-table v-show="!list"
                   :data="tableData"
                   border
         >
-          <el-table-column type="index" label="序号" width="50"></el-table-column>
+          <el-table-column label="序号" type="index" width="50"></el-table-column>
           <el-table-column
-            prop="date"
             label="日期"
+            prop="date"
             width="180">
           </el-table-column>
           <el-table-column
-            prop="name"
             label="文件名称"
+            prop="name"
             width="580">
           </el-table-column>
           <el-table-column
-            prop="size"
-            label="大小">
+            label="大小"
+            prop="size">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
             width="140">
             <template v-slot="scope">
-              <el-button @click="handleDownLoad(scope.row)" type="primary" size="small">下载</el-button>
+              <el-button size="small" type="primary" @click="handleDownLoad(scope.row)">下载</el-button>
             </template>
           </el-table-column>
           <el-table-column
@@ -48,18 +48,18 @@
             label="操作"
             width="200">
             <template v-slot="scope">
-              <el-button @click="handleClick(scope.row)" type="info" size="small">上传</el-button>
-              <el-button @click="handleDelete(scope.row)" type="danger" size="small">删除</el-button>
+              <el-button size="small" type="info" @click="handleClick(scope.row)">上传</el-button>
+              <el-button size="small" type="danger" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
     <!--    删除对话框部分-->
-    <el-dialog title="输入密码" :visible.sync="dialogFormVisible">
+    <el-dialog :visible.sync="dialogFormVisible" title="输入密码">
       <el-form :model="form">
         <el-form-item label="输入密码" label-width="auto">
-          <el-input v-model="form.name" autocomplete="off" size="small" show-passwor></el-input>
+          <el-input v-model="form.name" autocomplete="off" show-passwor size="small"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -91,8 +91,10 @@ export default {
     },
     handleSuccess (response, file, filelist) {
       this.list = !this.list
-      this.$router.push('/demo').catch(() => {
+
+      this.$router.go('/demo').catch(() => {
       })
+      this.fileList = []
     },
     handleClick () {
       this.list = !this.list
@@ -110,6 +112,7 @@ export default {
         responseType: 'blob'
       }).then((res) => {
         const {data, headers} = res
+        console.log(headers)
         const fileName = headers['content-disposition'].replace('attachment; filename=', '')
         console.log(fileName)
         // 此处当返回json文件时需要先对data进行JSON.stringify处理，其他类型文件不用做处理

@@ -1,5 +1,5 @@
 <template>
-  <div class="index" id="App">
+  <div id="App" class="index">
     <el-header>
       <el-menu
         :default-active="this.$route.path"
@@ -20,11 +20,10 @@
     <el-main>
       <router-view></router-view>
     </el-main>
-    <el-footer style="position:fixed;text-align:center;bottom:0;margin:0 auto;width:100%;color: #5c6b77">
-      <a target="_blank" style="color: #5c6b77" href="http://beian.miit.gov.cn">蜀ICP备2021025507号</a>&nbsp;
+    <div style="position:fixed;text-align:center;bottom:0;margin:0 auto;width:100%;color: #5c6b77">
+      <a href="https://beian.miit.gov.cn/" style="color: #5c6b77" target="_blank">蜀ICP备2021025507号-1</a>&nbsp;
       @2021-2022
-    </el-footer>
-
+    </div>
   </div>
 </template>
 
