@@ -70,8 +70,8 @@
     <!--    删除对话框部分结束-->
   </div>
 </template>
-
 <script>
+
 export default {
   name: 'demo',
   data () {
@@ -82,7 +82,9 @@ export default {
       },
       dialogFormVisible: false,
       fileList: [],
-      tableData: []
+      tableData: [],
+      input: '',
+      search_content: ''
     }
   },
   methods: {
@@ -135,11 +137,11 @@ export default {
         method: 'get',
         url: 'file',
         params: {
-          text: this.input
+          search: this.search_content
         }
       }).then((res) => {
         this.tableData = res.data
-        console.log('数据：', this.tableData)
+        // console.log('数据：', this.tableData)
       })
     }
     // formatFileSize (bytes, decimalPoint) {
@@ -154,8 +156,21 @@ export default {
   },
   created () {
     this.getData()
+  },
+  mounted: function () {
+    var vm = this
+    // 用$on事件来接收参数
+    this.bus.$on('search', (data) => {
+      vm.search_content = data
+      this.getData()
+    })
+  },
+  beforeDestroy () {
+    // 组件销毁前需要解绑事件。否则会出现重复触发事件的问题
+    this.bus.$off('search')
   }
 }
+
 </script>
 
 <style scoped>

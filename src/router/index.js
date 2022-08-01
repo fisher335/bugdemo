@@ -5,6 +5,7 @@ import map from '@/views/map'
 import bar from '@/views/bar'
 import about from '../views/about'
 import demo from '../views/demo'
+
 Vue.use(Router)
 
 export default new Router({

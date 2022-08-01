@@ -1,8 +1,6 @@
 <template>
   <div className="animated fadeIn" style="background-color: white">
-    <Row>
-      <div id="main"></div>
-    </Row>
+    <div id="main"></div>
   </div>
 </template>
 <script>

@@ -3,7 +3,7 @@
 
     <el-row align="middle">
       <el-col :span="6">
-        <label-wrap>请输入要生成二维码的文字：</label-wrap>
+        <label>请输入要生成二维码的文字：</label>
       </el-col>
 
     </el-row>

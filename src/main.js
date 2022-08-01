@@ -9,12 +9,13 @@ import 'element-ui/lib/theme-chalk/index.css'
 import * as echarts from 'echarts'
 
 import Axios from 'axios'
+import bus from './storage/bus.js'
 
 Axios.defaults.baseURL = '/api/'
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-
+Vue.prototype.bus = bus
 Axios.defaults.withCredentials = true
 Vue.prototype.$axios = Axios
 

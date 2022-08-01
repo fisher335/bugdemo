@@ -10,10 +10,15 @@
       >
         <el-menu-item v-for="(item, i) in navList" :key="i" :index="item.name">
           <template slot="title">
-            <!--            <i class="el-icon-s-marketing"-->
             <i :class="item.icon"></i>
             <span> {{ item.navItem }}</span>
           </template>
+        </el-menu-item>
+        <el-menu-item v-show="search_show" style="float: right">
+          <el-button class="el-button--primary" @click.prevent="file_search" >搜索</el-button>
+        </el-menu-item>
+        <el-menu-item v-show="search_show" style="float: right">
+          <el-input v-model="file_content" @keydown.enter.native="file_search" aria-placeholder="请输入你的信息" suffix-icon="el-icon-search"></el-input>
         </el-menu-item>
       </el-menu>
     </el-header>
@@ -38,11 +43,18 @@ export default {
         {name: '/demo', navItem: '文件列表', icon: 'el-icon-s-goods'},
         {name: '/bar', navItem: '柱状图', icon: 'el-icon-s-grid'},
         {name: '/map', navItem: '位置展示', icon: 'el-icon-s-marketing'}
-      ]
+      ],
+      search_show: true,
+      file_content: ''
     }
   },
   methods: {
     handleSelect (key, keyPath) {
+      // 控制文件里面中是搜索框是否出现
+      // this.search_show = key === '/demo'
+    },
+    file_search: function () {
+      this.bus.$emit('search', this.file_content)
     }
   }
 }
