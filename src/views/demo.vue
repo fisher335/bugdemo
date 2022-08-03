@@ -59,12 +59,13 @@
     <el-dialog :visible.sync="dialogFormVisible" title="输入密码">
       <el-form :model="form">
         <el-form-item label="输入密码" label-width="auto">
-          <el-input v-model="form.name" autocomplete="off" show-passwor size="small"></el-input>
+          <el-input v-model="form.password" autocomplete="off" show-passwor size="small"></el-input>
+          <el-input v-show="true" v-model="form.name" :disabled="true" autocomplete="off" size="small"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button @click="fileDelCancel">取 消</el-button>
+        <el-button type="primary" @click="fileDelSubmit">确 定</el-button>
       </div>
     </el-dialog>
     <!--    删除对话框部分结束-->
@@ -72,13 +73,16 @@
 </template>
 <script>
 
+import axios from 'axios'
+
 export default {
   name: 'demo',
   data () {
     return {
       list: false,
       form: {
-        name: ''
+        name: '',
+        password: ''
       },
       dialogFormVisible: false,
       fileList: [],
@@ -103,6 +107,7 @@ export default {
     },
     handleDelete (row) {
       console.log(row)
+      this.form.name = row.name
       this.dialogFormVisible = true
     },
 
@@ -143,16 +148,28 @@ export default {
         this.tableData = res.data
         // console.log('数据：', this.tableData)
       })
+    },
+    fileDelCancel () {
+      this.dialogFormVisible = false
+    },
+    fileDelSubmit () {
+      /* formData格式提交： */
+      let formData = new FormData()
+      for (var key in this.form) {
+        console.log(key + '----------' + this.form[key])
+        formData.append(key, this.form[key])
+      }
+
+      axios({
+        method: 'post',
+        url: 'delete',
+        withCredentials: true,
+        data: formData
+      }).then((res) => {
+        this.dialogFormVisible = false
+        this.$router.go(0)
+      })
     }
-    // formatFileSize (bytes, decimalPoint) {
-    //   if (bytes === 0) return '0 Bytes'
-    //   // eslint-disable-next-line one-var
-    //   const k = 1000,
-    //     dm = decimalPoint || 2,
-    //     sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-    //     i = Math.floor(Math.log(bytes) / Math.log(k))
-    //   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-    // }
   },
   created () {
     this.getData()
