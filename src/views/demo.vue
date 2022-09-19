@@ -59,7 +59,7 @@
     <el-dialog :visible.sync="dialogFormVisible" title="输入密码">
       <el-form :model="form">
         <el-form-item label="输入密码" label-width="auto">
-          <el-input v-model="form.password" autocomplete="off" show-passwor size="small"></el-input>
+          <el-input v-model="form.password" autocomplete="off" show-password size="small"></el-input>
           <el-input v-show="true" v-model="form.name" :disabled="true" autocomplete="off" size="small"></el-input>
         </el-form-item>
       </el-form>
@@ -156,7 +156,7 @@ export default {
       /* formData格式提交： */
       let formData = new FormData()
       for (var key in this.form) {
-        console.log(key + '----------' + this.form[key])
+        // console.log(key + '----------' + this.form[key])
         formData.append(key, this.form[key])
       }
 
@@ -166,8 +166,12 @@ export default {
         withCredentials: true,
         data: formData
       }).then((res) => {
-        this.dialogFormVisible = false
-        this.$router.go(0)
+        if (res.data.msg === '密码错误') {
+          alert('密码错误')
+        } else {
+          this.dialogFormVisible = false
+          this.$router.go(0)
+        }
       })
     }
   },
